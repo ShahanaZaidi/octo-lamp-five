@@ -30,20 +30,31 @@ window.addEventListener('DOMContentLoaded', () => {
   // Basic ideas from https://code-boxx.com/simple-javascript-quiz/
   const quizArray = [
     {
-      q: 'Which is the third planet from the sun?',
+      q: '1. Which is the third planet from the sun?',
       o: ['Saturn', 'Earth', 'Pluto', 'Mars'],
       a: 1, // array index 1 - so Earth is the correct answer here
     },
     {
-      q: 'Which is the largest ocean on Earth?',
+      q: '2. Which is the largest ocean on Earth?',
       o: ['Atlantic Ocean', 'Indian Ocean', 'Arctic Ocean', 'Pacific Ocean'],
       a: 3,
     },
     {
-      q: 'What is the capital of Australia',
+      q: '3. What is the capital of Australia?',
       o: ['Sydney', 'Canberra', 'Melbourne', 'Perth'],
       a: 1,
     },
+    {
+      q: '4. In which direction does the sun rise?',
+      o: ['South', 'East', 'North', 'West'],
+      a: 1,
+    },
+    {
+      q: '5. Which country is called the land of rising sun?',
+      o: ['Japan', 'Finland', 'Australia', 'Indonesia'],
+      a: 0,
+    },
+
   ];
 
   // function to Display the quiz questions and answers from the object
@@ -64,8 +75,9 @@ window.addEventListener('DOMContentLoaded', () => {
   };
 
   // Calculate the score
+  let score = 0;
   const calculateScore = () => {
-    let score = 0;
+    
     quizArray.map((quizItem, index) => {
       for (let i = 0; i < 4; i++) {
         //highlight the li if it is the correct answer
@@ -76,15 +88,62 @@ window.addEventListener('DOMContentLoaded', () => {
 
         if (quizItem.a == i) {
           //change background color of li element here
+          liElement.style.backgroundColor = '#91AD8C'
         }
 
         if (radioElement.checked) {
           // code for task 1 goes here
+          if (quizItem.a == i) {
+            //change background color of li element here
+            score = score + 1;
+            
+          }
         }
       }
     });
+    
+    let displayScore = document.getElementById('score');
+    displayScore.innerHTML = 'You scored ' + score+" / "+"5"
   };
 
   // call the displayQuiz function
   displayQuiz();
+  const btnSubmit = document.getElementById('btnSubmit');
+  btnSubmit.addEventListener("click",calculateScore);
+  //reset button
+  const btnReset = document.getElementById('btnReset');
+  btnReset.addEventListener("click",resetfunc);
+  function resetfunc () {
+  window.location.reload();
+  }
+  
+  function startTimer(duration, display) {
+    var timer = duration, minutes, seconds;
+    setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.textContent = minutes + ":" + seconds;
+        
+        if (timer == 0) {
+          calculateScore();
+          //timer = 0; 
+          score = 0;
+          
+         } else timer-- //else if (--timer < 0) {
+        //     timer = duration;
+           
+       // }
+    }, 1000);
+    
+}
+startTimer(60, document.querySelector('#time'));
+// window.onload = function () {
+//     var oneMinutes = 60 * 1,
+//         display = document.querySelector('#time');
+//     startTimer(oneMinutes, display);
+// };
 });
